@@ -33,6 +33,8 @@ public class DetalleReserva {
 	private BigDecimal valorIce;
 	@Column(name = "fecha_reserva")
 	private LocalDateTime fechaReserva;
+	@Column(name = "dere_tarjeta")
+	private String tarjeta;
 
 	@OneToOne
 	@JoinColumn(name = "dere_id_reserva")
@@ -79,4 +81,12 @@ public class DetalleReserva {
 	public void setFechaReserva(LocalDateTime fechaReserva) {
 		this.fechaReserva = fechaReserva;
 	}
+	public String getTarjeta() {
+		return tarjeta;
+	}
+	public void setTarjeta(String tarjeta) {
+		this.tarjeta = tarjeta;
+	}
+	
+	
 }
