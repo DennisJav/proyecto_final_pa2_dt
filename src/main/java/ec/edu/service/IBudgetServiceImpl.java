@@ -70,7 +70,11 @@ public class IBudgetServiceImpl implements IBudgetService{
 		List<Reserva> reservaVehiculo = vehiculoPlaca.getReservaVehiculo();
 		reservaVehiculo.add(reserva);
 		vehiculoPlaca.setReservaVehiculo(reservaVehiculo);
+		 
+		//Cambio estado a no disponible
 		vehiculoPlaca.setEstado("ND");
+		
+		
 		this.vehiculoService.actualizarVehiculo(vehiculoPlaca);
 		
 		reservaCliente.add(reserva);
