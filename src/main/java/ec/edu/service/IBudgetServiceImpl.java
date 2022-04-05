@@ -8,8 +8,10 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 import ec.edu.modelo.DetalleReserva;
 import ec.edu.modelo.Reserva;
@@ -18,6 +20,8 @@ import ec.edu.modelo.Vehiculo;
 
 @Service
 public class IBudgetServiceImpl implements IBudgetService{
+	
+	 static final Logger LOG = Logger.getLogger(IBudgetServiceImpl.class);
 	
 	@Autowired
 	private IVehiculoService vehiculoService;
@@ -86,7 +90,44 @@ public class IBudgetServiceImpl implements IBudgetService{
 		
 		return reserva;
 		
-	}	
+	}
+
+
+	@Override
+	public void registrarseComocliente(String cedula, String nombre, String apellido, LocalDate fechaNacimiento,
+			String genero, String registro, String pasword) {
+		// TODO Auto-generated method stub
+		try {
+			Usuario usuario = new Usuario();
+			usuario.setNombre(nombre);
+			usuario.setApellido(apellido);
+			usuario.setCedula(cedula);
+			usuario.setFechaNacimiento(fechaNacimiento);
+			usuario.setGenero(genero);
+			usuario.setPasword(pasword);
+			usuario.setRegistro(registro);
+			
+			Usuario doble=this.usuarioService.buscarUsuarioCedula(cedula);
+			if(doble.getCedula() !=  usuario.getCedula()) {
+				this.usuarioService.insertarUsuario(usuario);
+			}else {
+				LOG.error("El Usuario ya existe!!!!");
+			}
+		}catch (NullPointerException e) {
+			// TODO: handle exception
+			LOG.info("Error nulo");
+		}
+		
+		
+	}
+
+
+
+
+	
+	
+	
+
 	
 	
 

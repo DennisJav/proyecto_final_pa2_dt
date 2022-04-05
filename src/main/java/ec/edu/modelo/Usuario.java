@@ -1,5 +1,6 @@
 package ec.edu.modelo;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -29,13 +30,16 @@ public class Usuario {
 	@Column(name = "usua_apellido")
 	private String apellido;
 	@Column(name = "usua_fecha_nacimiento")
-	private LocalDateTime fechaNacimiento;
+	private LocalDate fechaNacimiento;
 	@Column(name = "usua_genero")
 	private String genero;
 	@Column(name = "usua_registro")
 	private String registro;
 	@Column(name = "usua_tarjeta")
 	private String numeroTarjeta;
+	@Column(name = "usua_pasword")
+	private String pasword;
+	
 	
 
 	@OneToMany(mappedBy = "usuario",cascade=CascadeType.ALL) 
@@ -50,8 +54,18 @@ public class Usuario {
 	
 	
 	//Metodos set y get 
+	
+	
+	
+	
 	public Integer getId() {
 		return id;
+	}
+	public String getPasword() {
+		return pasword;
+	}
+	public void setPasword(String pasword) {
+		this.pasword = pasword;
 	}
 	public void setId(Integer id) {
 		this.id = id;
@@ -74,10 +88,10 @@ public class Usuario {
 	public void setApellido(String apellido) {
 		this.apellido = apellido;
 	}
-	public LocalDateTime getFechaNacimiento() {
+	public LocalDate getFechaNacimiento() {
 		return fechaNacimiento;
 	}
-	public void setFechaNacimiento(LocalDateTime fechaNacimiento) {
+	public void setFechaNacimiento(LocalDate fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
 	}
 	public String getGenero() {
