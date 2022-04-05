@@ -14,7 +14,7 @@
 
 <body>
 	<h1>Registrar Pago</h1>
-	<form th:action="@{/usuarios/reserva/pagoGenerado}" th:object="${reserva}" th:method="GET">
+	<form th:action="@{/usuarios/reserva/pagoGenerado}" th:object="${reserva}" th:method="PUT">
 
 		<table>
 			<tr>
@@ -22,7 +22,7 @@
 					<label> Fecha Inicio: </label>
 				</td>
 				<td>
-					<input type="date" id="fechaInicio" th:field="*{fechaInicio}" </td>
+					<input type="datetime-local" id="fechaInicio" th:field="*{fechaInicio}" </td>
 			</tr>
 			
 			<tr>
@@ -30,7 +30,7 @@
 					<label> Fecha Fin: </label>
 				</td>
 				<td>
-					<input type="date" id="fechaFin" th:field="*{fechaFin}" </td>
+					<input type="datetime-local" id="fechaFin" th:field="*{fechaFin}" </td>
 			</tr>
 			
 			<tr>
@@ -54,7 +54,7 @@
 					<label> Tarjeta: </label>
 				</td>
 				<td>
-					<input type="text" id="tarjeta" th:field="*{usuario.tarjeta}" </td>
+					<input type="text" id="tarjeta" th:field="*{usuario.numeroTarjeta}" </td>
 			</tr>
 
 		</table>

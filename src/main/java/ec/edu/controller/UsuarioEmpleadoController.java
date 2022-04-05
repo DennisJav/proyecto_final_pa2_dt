@@ -6,11 +6,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import ec.edu.modelo.Reserva;
 import ec.edu.modelo.Usuario;
 import ec.edu.modelo.Vehiculo;
 import ec.edu.service.IBudgetService;
+import ec.edu.service.IReservaService;
 import ec.edu.service.IUsuarioService;
 import ec.edu.service.IVehiculoService;
 
@@ -18,12 +21,16 @@ import ec.edu.service.IVehiculoService;
 @RequestMapping("/empleados/")
 public class UsuarioEmpleadoController {
 
+	private Reserva aux;
+	
 	@Autowired
 	private IUsuarioService usuarioService;
 	@Autowired
 	private IVehiculoService vehiculoService;
 	@Autowired
 	private IBudgetService budgetService;
+	@Autowired
+	private IReservaService reservaService;
 	
 	@GetMapping("registrarC")
 	public String vistaPaginaIngresoDatosCliente(Usuario usuario) {
@@ -73,6 +80,40 @@ public class UsuarioEmpleadoController {
 		modelo.addAttribute("vehiculoBuscado",vehiculoBuscado);
 		return "mostrarPlaca";
 	}
+	
+	@GetMapping("retirar/vehiculo/buscar")
+	public String vistaPaginaRetirarrVehiculoReservado(Reserva reserva) {
+		return "retirarVehiculoDatos";
+	}
+	
+	@GetMapping("retirar/encontrado")
+	public String mostrarVehiculoReservado(Model modelo, Reserva reserva) {
+		
+		Reserva vehiculoReserva = this.reservaService.buscarReservaNumero(reserva.getNumeroReserva());
+		modelo.addAttribute("vehiculoReserva",vehiculoReserva);
+		System.out.println("RESERVA MOSTRAR"+reserva.getNumeroReserva());
+		aux = reserva;
+		return "mostrarVehiculoRetirar";
+	}
+	
+	
+	@GetMapping("retirar/vehiculo")
+	public String retirarVehiculoReservado(Model modelo, Reserva reserva) {
+		System.out.println("RETIRAR+  "+reserva.getNumeroReserva());
+		reserva = aux;
+		Reserva vehiculoReserva = this.budgetService.retirarVehiculoReserva(reserva.getNumeroReserva());
+		modelo.addAttribute("vehiculoReserva",vehiculoReserva);
+		
+		return "retirarVehiculoEncontradoNotify";
+	}
+	
+	@GetMapping("sinReserva/buscar")
+	public String vistaPaginaSinReservaDatos(Vehiculo vehiculo){
+		return "vistaPaginaSinReserva";
+	}
+	
+	
+	
 	
 	
 	

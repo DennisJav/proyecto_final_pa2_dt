@@ -17,14 +17,13 @@
 
 <body>
 
-
-
 	<h1>
 		Detalles de la reserva
 	</h1>
 
 	<table class="table table-dark table-striped">
 		<!--Cabezera de tabla-->
+
 		<thead>
 			<tr>
 				<!--th tmb sirve para columnas-->
@@ -36,22 +35,27 @@
 				<th>Subtotal</th>
 				<th>ICE</th>
 				<th>Total</th>
+				<th>Estado Reserva</th>
 			</tr>
 		</thead>
 		<!--Cuerpo de tabla-->
 		<tbody>
 			<tr>
 
-				<td th:text="${reservaActualizar.numeroReserva}"></td>
-				<td th:text="${reservaActualizar.vehiculo.placa}"></td>
-				<td th:text="${reservaActualizar.usuario.cedula}"></td>
-				<td th:text="${reservaActualizar.fechaInicio}"></td>
-				<td th:text="${reservaActualizar.fechaFin}"></td>
-				<td th:text="${#numers.formatDecimal(reservaActualizar.detallereserva.valorSubtotal,1,2)}"></td>
-				<td th:text="${#numers.formatDecimal(reservaActualizar.detallereserva.valorIce,1,2)}"></td>
-				<td th:text="${#numers.formatDecimal(reservaActualizar.detallereserva.valorTotal,1,2)}"></td>
+				<td th:text="*{reservaActualizar.numeroReserva}"></td>
+				<td th:text="*{reservaActualizar.vehiculo.placa}"></td>
+				<td th:text="*{reservaActualizar.usuario.cedula}"></td>
+				<td th:text="*{reservaActualizar.fechaInicio}"></td>
+				<td th:text="*{reservaActualizar.fechaFin}"></td>
+				<td th:text="*{reservaActualizar.valorSubtotal}"></td>
+				<td th:text="*{reservaActualizar.valorIce}"></td>
+				<td th:text="*{reservaActualizar.valorTotal}"></td>
+				<td th:text="*{reservaActualizar.estado}"></td>
+				
+				
 			<tr>
 		</tbody>
+
 	</table>
 	<h3>Reservas realizadas</h3>
 	<input type="button" value="Página anterior" onClick="history.go(-1);">

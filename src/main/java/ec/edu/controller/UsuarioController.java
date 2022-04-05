@@ -22,10 +22,13 @@ import ec.edu.service.IBudgetService;
 import ec.edu.service.IUsuarioService;
 import ec.edu.service.IVehiculoService;
 
+
 @Controller
 @RequestMapping("/usuarios/")
 public class UsuarioController {
 
+	private Reserva reservaGlobal;
+	
 	@Autowired
 	private IUsuarioService usuarioService;
 	@Autowired
@@ -65,40 +68,42 @@ public class UsuarioController {
 		return "reservaIngresoDatos";
 	}
 
-	@GetMapping("reservar/verficarDisponible")
-	public String verificarDisponibilidad(Reserva reserva, Model modelo, BindingResult result,
-			RedirectAttributes redirect) {
+	@GetMapping("verficarDisponible")
+	public String verificarDisponibilidad(Reserva reserva, Model modelo, BindingResult result) {
+		
+		System.out.println("--------METODO VERIFICAR DISPONIBLE------- "+reserva.getFechaFin());
 		Vehiculo vehiBuscado = this.vehiculoService.buscarVehiculoPlaca(reserva.getVehiculo().getPlaca());
 		BigDecimal valorTotal = this.vehiculoService.costoReserva(reserva.getVehiculo().getPlaca(),
 				reserva.getFechaInicio(), reserva.getFechaFin());
-		modelo.addAttribute("reserva", reserva);
-
 		List<Reserva> reservasVehiculos = vehiBuscado.getReservaVehiculo();
-		if (reservasVehiculos.isEmpty()) {
-			String mensaje = "Vehiculo Disponible, costo en el rango de fechas: " + valorTotal;
-			redirect.addFlashAttribute("mensaje", mensaje);
+		if (reservasVehiculos.isEmpty()||reservasVehiculos == null) {
+			System.out.println("--- ENTRO AL IF ---");
 			return "pagarReserva";
 		} else {
 			for (Reserva r : reservasVehiculos) {
 				if (this.budgetService.fechasNoDisponibles(r.getFechaInicio(), r.getFechaFin(),
 						reserva.getFechaInicio(), reserva.getFechaFin())) {
-					redirect.addFlashAttribute("d", "No disponible fechas");
-					return "reservaIngresoDatos";
+					System.out.println("-----NO FECHAS---");
+					return "listaVehiculosDisponibles";
 				}
 			}
-			String mensaje = "Vehiculo Disponible, costo en el rango de fechas: " + valorTotal;
-			redirect.addFlashAttribute("mensaje", mensaje);
+			System.out.println("----EXISTES FECHAS-----");
 			return "pagarReserva";
 		}
 	}
 
 	@PutMapping("reserva/pagoGenerado")
-	public String pagarReserva(Model modelo, Reserva reserva) {
+	public String pagoGenerado(Model modelo, Reserva reserva) {
 		Reserva reservaActualizar = this.budgetService.realizarReserva(reserva.getVehiculo().getPlaca(),
 				reserva.getUsuario().getCedula(), reserva.getFechaInicio(), reserva.getFechaFin(),
 				reserva.getUsuario().getNumeroTarjeta());
+		System.out.println("----METODO PAGO GENERADO DESPUES-------");
+		System.out.println("PAGO GENERADO"+reservaActualizar.getValorTotal());
 		modelo.addAttribute("reservaActualizar",reservaActualizar);
 		return "mostrarReserva";
 	}
+	
+
+	
 
 }

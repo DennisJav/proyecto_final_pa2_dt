@@ -14,6 +14,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 @Entity
 @Table(name = "usuario")
 public class Usuario {
@@ -30,7 +32,8 @@ public class Usuario {
 	@Column(name = "usua_apellido")
 	private String apellido;
 	@Column(name = "usua_fecha_nacimiento")
-	private LocalDate fechaNacimiento;
+	@DateTimeFormat(pattern = "yyyy-MM-dd\'T\'HH:mm")
+	private LocalDateTime fechaNacimiento;
 	@Column(name = "usua_genero")
 	private String genero;
 	@Column(name = "usua_registro")
@@ -88,10 +91,10 @@ public class Usuario {
 	public void setApellido(String apellido) {
 		this.apellido = apellido;
 	}
-	public LocalDate getFechaNacimiento() {
+	public LocalDateTime getFechaNacimiento() {
 		return fechaNacimiento;
 	}
-	public void setFechaNacimiento(LocalDate fechaNacimiento) {
+	public void setFechaNacimiento(LocalDateTime fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
 	}
 	public String getGenero() {
@@ -112,6 +115,15 @@ public class Usuario {
 	}
 	public void setNumeroTarjeta(String numeroTarjeta) {
 		this.numeroTarjeta = numeroTarjeta;
+	}
+	
+	
+	@Override
+	public String toString() {
+		return "Usuario [id=" + id + ", cedula=" + cedula + ", nombre=" + nombre + ", apellido=" + apellido
+				+ ", fechaNacimiento=" + fechaNacimiento + ", genero=" + genero + ", registro=" + registro
+				+ ", numeroTarjeta=" + numeroTarjeta + ", pasword=" + pasword + ", reservaVehiculo=" + reservaVehiculo
+				+ "]";
 	}
 	
 	

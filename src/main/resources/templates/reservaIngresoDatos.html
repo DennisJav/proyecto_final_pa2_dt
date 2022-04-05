@@ -14,7 +14,7 @@
 
 <body>
 	<h1>Buscar Vehiculos Disponibles en las fechas: </h1>
-	<form th:action="@{/usuarios/reserva/verficarDisponible}" th:object="${reserva}" th:method="GET">
+	<form th:action="@{/usuarios/verficarDisponible}" th:object="${reserva}" th:method="GET">
 
 		<table>
 			<tr>
@@ -22,20 +22,14 @@
 					<label> Fecha Inicio: </label>
 				</td>
 				<td>
-					<input type="date" id="fechaInicio" th:field="*{fechaInicio}" </td>
+					<input type="datetime-local" id="fechaInicio" th:field="*{fechaInicio}" </td>
 
 				<td>
 					<label> Fecha Fin: </label>
 				</td>
 				<td>
-					<input type="date" id="fechaFin" th:field="*{fechaFin}" </td>
+					<input type="datetime-local" id="fechaFin" th:field="*{fechaFin}" </td>
 			</tr>
-
-
-
-		</table>
-
-		<table>
 
 			<tr>
 				<td>
@@ -53,6 +47,7 @@
 			</tr>
 
 		</table>
+
 
 		<input type="submit" value="Reservar">
 	</form>

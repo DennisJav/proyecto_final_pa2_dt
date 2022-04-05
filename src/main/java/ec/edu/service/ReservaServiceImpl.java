@@ -36,5 +36,11 @@ public class ReservaServiceImpl implements IReservaService{
 		this.reservaRepo.borrarReserva(id);
 	}
 
+	@Override
+	public Reserva buscarReservaNumero(String numero) {
+		// TODO Auto-generated method stub
+		return this.reservaRepo.buscarReservaNumero(numero);
+	}
+
 	
 }

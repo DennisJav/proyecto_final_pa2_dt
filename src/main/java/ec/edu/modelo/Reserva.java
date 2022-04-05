@@ -16,6 +16,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 
 @Entity
 @Table(name = "reserva")
@@ -27,13 +29,23 @@ public class Reserva {
 	@Column(name="rese_id")
 	private Integer id;
 	@Column(name = "rese_fecha_inicio")
-	private LocalDate fechaInicio;
+	@DateTimeFormat(pattern = "yyyy-MM-dd\'T\'HH:mm")
+	private LocalDateTime fechaInicio;
 	@Column(name = "rese_fecha_fin")
-	private LocalDate fechaFin;
+	@DateTimeFormat(pattern = "yyyy-MM-dd\'T\'HH:mm")
+	private LocalDateTime fechaFin;
 	@Column(name = "rese_estado")
 	private String estado;
 	@Column(name = "rese_numero_reserva")
 	private String numeroReserva;
+	@Column(name = "rese__valor_subtotal")
+	private BigDecimal valorSubtotal;
+	@Column(name = "rese__valor_total")
+	private BigDecimal valorTotal;
+	@Column(name = "rese__valor_ice")
+	private BigDecimal valorIce;
+	
+	
 	
 	//Relaciones
 	@ManyToOne
@@ -82,16 +94,16 @@ public class Reserva {
 		this.id = id;
 	}
 
-	public LocalDate getFechaInicio() {
+	public LocalDateTime getFechaInicio() {
 		return fechaInicio;
 	}
-	public void setFechaInicio(LocalDate fechaInicio) {
+	public void setFechaInicio(LocalDateTime fechaInicio) {
 		this.fechaInicio = fechaInicio;
 	}
-	public LocalDate getFechaFin() {
+	public LocalDateTime getFechaFin() {
 		return fechaFin;
 	}
-	public void setFechaFin(LocalDate fechaFin) {
+	public void setFechaFin(LocalDateTime fechaFin) {
 		this.fechaFin = fechaFin;
 	}
 	public String getEstado() {
@@ -106,6 +118,42 @@ public class Reserva {
 	public void setNumeroReserva(String numeroReserva) {
 		this.numeroReserva = numeroReserva;
 	}
-		
+	
+	
+	
+	public BigDecimal getValorSubtotal() {
+		return valorSubtotal;
+	}
+	public void setValorSubtotal(BigDecimal valorSubtotal) {
+		this.valorSubtotal = valorSubtotal;
+	}
+	public BigDecimal getValorTotal() {
+		return valorTotal;
+	}
+	public void setValorTotal(BigDecimal valorTotal) {
+		this.valorTotal = valorTotal;
+	}
+	public BigDecimal getValorIce() {
+		return valorIce;
+	}
+	public void setValorIce(BigDecimal valorIce) {
+		this.valorIce = valorIce;
+	}
+	public DetalleReserva getDetallereserva() {
+		return detallereserva;
+	}
+	public void setDetallereserva(DetalleReserva detallereserva) {
+		this.detallereserva = detallereserva;
+	}
+	
+	
+	@Override
+	public String toString() {
+		return "Reserva [id=" + id + ", fechaInicio=" + fechaInicio + ", fechaFin=" + fechaFin + ", estado=" + estado
+				+ ", numeroReserva=" + numeroReserva + ", vehiculo=" + vehiculo + ", usuario=" + usuario
+				+ ", detallereserva=" + detallereserva + "]";
+	}
+	
+	
 	
 }

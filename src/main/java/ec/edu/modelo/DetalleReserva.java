@@ -14,6 +14,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 
 
 @Entity
@@ -25,13 +27,8 @@ public class DetalleReserva {
 	@SequenceGenerator(name = "seq_detalle", sequenceName = "seq_detalle",allocationSize = 1)
 	@Column(name="dere_id")
 	private Integer id;
-	@Column(name = "dere__valor_subtotal")
-	private BigDecimal valorSubtotal;
-	@Column(name = "dere__valor_total")
-	private BigDecimal valorTotal;
-	@Column(name = "dere__valor_ice")
-	private BigDecimal valorIce;
 	@Column(name = "fecha_reserva")
+	@DateTimeFormat(pattern = "yyyy-MM-dd\'T\'HH:mm")
 	private LocalDateTime fechaReserva;
 	@Column(name = "dere_tarjeta")
 	private String tarjeta;
@@ -56,25 +53,6 @@ public class DetalleReserva {
 		this.id = id;
 	}
 
-	public BigDecimal getValorSubtotal() {
-		return valorSubtotal;
-	}
-	public void setValorSubtotal(BigDecimal valorSubtotal) {
-		this.valorSubtotal = valorSubtotal;
-	}
-	public BigDecimal getValorTotal() {
-		return valorTotal;
-	}
-	public void setValorTotal(BigDecimal valorTotal) {
-		this.valorTotal = valorTotal;
-	}
-	public BigDecimal getValorIce() {
-		return valorIce;
-	}
-	public void setValorIce(BigDecimal valorIce) {
-		this.valorIce = valorIce;
-	}
-	
 	public LocalDateTime getFechaReserva() {
 		return fechaReserva;
 	}

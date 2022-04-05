@@ -8,7 +8,7 @@ public interface IReservaRepo {
 	void actualizarReserva(Reserva reserva);
 	Reserva buscarReserva(Integer id);
 	void borrarReserva(Integer id);
-	
+	Reserva buscarReservaNumero(String numero);
 	
 	
 	

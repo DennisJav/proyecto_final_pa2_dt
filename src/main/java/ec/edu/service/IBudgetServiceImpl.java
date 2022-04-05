@@ -1,6 +1,7 @@
 package ec.edu.service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -38,18 +39,24 @@ public class IBudgetServiceImpl implements IBudgetService{
 
 	@Override
 	@Transactional
-	public Reserva realizarReserva(String placa, String cedula, LocalDate fechaInicio, LocalDate fechaFin,
+	public Reserva realizarReserva(String placa, String cedula, LocalDateTime fechaInicio, LocalDateTime fechaFin,
 			String tarjeta) {
+		System.out.println("ENTRO AL METODO");
+		
 		// TODO Auto-generated method stub
 		Vehiculo vehiculoPlaca = this.vehiculoService.buscarVehiculoPlaca(placa);
+		System.out.println("placa"+vehiculoPlaca.getPlaca());
 		long diasReservados = DAYS.between(fechaInicio, fechaFin); //paso el tiempo en segundos a dias
+		System.out.println("dias "+diasReservados);
 		Usuario user = this.usuarioService.buscarUsuarioCedula(cedula);
-		
+		System.out.println("Cedula "+user.getCedula());
 		//Calculo de valores para reserva
+		
 		BigDecimal valorDiario = vehiculoPlaca.getValorDia();
 		BigDecimal valorSubtotal = valorDiario.multiply(new BigDecimal(diasReservados));
-		BigDecimal valorICE = valorSubtotal.multiply(new BigDecimal(0.15));
-		BigDecimal valorTotal = valorSubtotal.add(valorICE);
+		BigDecimal valorICE = valorSubtotal.multiply(new BigDecimal(0.15)).setScale(3,RoundingMode.UP);
+		BigDecimal valorTotal = valorSubtotal.add(valorICE).setScale(3,RoundingMode.UP);
+		System.out.println("Valor total: "+valorTotal);
 		
 		List<Reserva> reservaCliente = user.getReservaVehiculo();
 		if(reservaCliente == null) {
@@ -58,65 +65,95 @@ public class IBudgetServiceImpl implements IBudgetService{
 		Reserva reserva = new Reserva();
 		reserva.setFechaInicio(fechaInicio);
 		reserva.setFechaFin(fechaFin);
-		reserva.setEstado("G");
+		reserva.setEstado("Generado");
 		reserva.setUsuario(user);
 		reserva.setVehiculo(vehiculoPlaca);
-		reserva.setNumeroReserva(reserva.getId().toString());
-		this.reservaService.insertarReserva(reserva);
-	
+		reserva.setValorIce(valorICE);
+		reserva.setValorSubtotal(valorSubtotal);
+		reserva.setValorTotal(valorTotal);
+		
+		String s = String.valueOf((int)(Math.random()*500)+100);
+		reserva.setNumeroReserva(s);
+
+		System.out.println("Metodo MEDIO");
+		
 		List<Reserva> reservaVehiculo = vehiculoPlaca.getReservaVehiculo();
 		if(reservaVehiculo==null) {
 			reservaVehiculo=new ArrayList<>();
 		}
 		reservaVehiculo.add(reserva);
 		vehiculoPlaca.setReservaVehiculo(reservaVehiculo);
-		this.vehiculoService.actualizarVehiculo(vehiculoPlaca);
+		vehiculoPlaca.setEstado("No Disponible");
 		
 		reservaCliente.add(reserva);
 		user.setReservaVehiculo(reservaCliente);
 		user.setNumeroTarjeta(tarjeta);
-		this.usuarioService.actualizarUsuario(user);
 		
 		
+		System.out.println("METODOS");
 		
 		DetalleReserva pago = new DetalleReserva();
 		pago.setFechaReserva(LocalDateTime.now());
 		pago.setReserva(reserva);
 		pago.setTarjeta(tarjeta);
-		pago.setValorIce(valorICE);
-		pago.setValorSubtotal(valorSubtotal);
-		pago.setValorTotal(valorTotal);
+	
+		System.out.println("YA MISMO");
 		
 		reserva.setDetalleReserva(pago);
 		
-		reserva.setNumeroReserva(reserva.getId().toString());
-		this.reservaService.actualizarReserva(reserva);
+		System.out.println("YA MISMO DOS");
+		
+		
+		System.out.println("DESPUES DEL M");
+		
+		System.out.println("antes de actualizarles");
+		
+		this.reservaService.insertarReserva(reserva);
 
+		
+		
+		System.out.println("Resera");
+		System.out.println("antes de salir");
 		return reserva;
 		
 	}
 	
 	
 	@Override
-	public boolean fechasNoDisponibles(LocalDate fechaInicioReservada, LocalDate fechaFinReservada, LocalDate fechaInicioVerificar,
-			LocalDate fechaFinVerificar) {
+	public boolean fechasNoDisponibles(LocalDateTime fechaInicioReservada, LocalDateTime fechaFinReservada, LocalDateTime fechaInicioVerificar,
+			LocalDateTime fechaFinVerificar) {
+
 		
-		Period fecha = Period.between(fechaFinReservada, fechaInicioVerificar);
-		if (fecha.isZero()) {
+		if (fechaInicioReservada.isEqual(fechaInicioVerificar)) {
 			return true;
-		} else if (fechaInicioVerificar.isAfter(fechaFinReservada) && fechaFinVerificar.isAfter(fechaInicioVerificar)) {
-			return false;
-		} else if (fechaInicioVerificar.isBefore(fechaInicioReservada) && fechaFinVerificar.isBefore(fechaInicioVerificar)) {
-			return false;
+		} else if (fechaInicioVerificar.isAfter(fechaInicioReservada) && fechaInicioVerificar.isBefore(fechaFinReservada)) {
+			return true;
+		} else if (fechaFinVerificar.isAfter(fechaInicioReservada) && fechaFinVerificar.isBefore(fechaFinReservada)) {
+			return true;
 		} else {
-			return true;
+			return false;
 		}
 		
 	}
+
+
+	@Override
+	public Reserva retirarVehiculoReserva(String numeroReserva) {
+		// TODO Auto-generated method stub
+		Reserva reserva = this.reservaService.buscarReservaNumero(numeroReserva);
+		reserva.setEstado("Ejecutada");
+		this.reservaService.actualizarReserva(reserva);
+		
+		Vehiculo vehiculo = reserva.getVehiculo();
+		vehiculo.setEstado("Indisponible");
+		this.vehiculoService.actualizarVehiculo(vehiculo);
+		
+		
+		return reserva;
+	}
+	
 	
 	
 
-
-	
 	
 }

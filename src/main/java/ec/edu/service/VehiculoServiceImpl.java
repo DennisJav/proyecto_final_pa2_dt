@@ -2,6 +2,7 @@ package ec.edu.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +56,7 @@ public class VehiculoServiceImpl implements IVehiculoService{
 	}
 
 	@Override
-	public BigDecimal costoReserva(String placa, LocalDate fechaInicio, LocalDate fechaFin) {
+	public BigDecimal costoReserva(String placa, LocalDateTime fechaInicio, LocalDateTime fechaFin) {
 		// TODO Auto-generated method stub
 		
 		Vehiculo vehiculoCalcular = this.buscarVehiculoPlaca(placa);
