@@ -35,6 +35,12 @@ public class UsuarioEmpleadoController {
 	@Autowired
 	private IReservaService reservaService;
 	
+	@GetMapping("menu/empleado")
+	public String menuPrincipal() {
+		return "menuEmpleado";
+	}
+	
+	
 	@GetMapping("registrarC")
 	public String vistaPaginaIngresoDatosCliente(Usuario usuario) {
 		return "registrarCliente";
@@ -148,7 +154,7 @@ public class UsuarioEmpleadoController {
 				if (this.budgetService.fechasNoDisponibles(r.getFechaInicio(), r.getFechaFin(),
 						reserva.getFechaInicio(), reserva.getFechaFin())) {
 					System.out.println("-----NO FECHAS---");
-					return "listaVehiculosDisponibles";
+					return "vistaPaginaSinReserva";
 				}
 			}
 			System.out.println("----EXISTES FECHAS-----");

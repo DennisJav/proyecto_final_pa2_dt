@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+	<title>PRUEBA</title>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="x-ua-compatible">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+		integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<link th:href="@{/css/misEstilos.css}" rel="stylesheet">
+</head>
+
+<body>
+	<h3>BUDGET</h>3
+	<div class="content-center">
+		<form method="get" action="http://localhost:8081/empleados/registrarC">
+			<input type="submit" value="Registrar Cliente">
+		</form>
+		<form method="get" action="http://localhost:8081/empleados/buscar/cliente">
+			<input type="submit" value="Buscar Cliente">
+		</form>
+		<form method="get" action="http://localhost:8081/empleados/datosVehiculo">
+			<input type="submit" value="Ingrese Vehiculos">
+		</form>
+		<form method="get" action="http://localhost:8081/empleados/buscar/vehiculo/placa">
+			<input type="submit" value="Buscar Vehiculo">
+		</form>
+		<form method="get" action="http://localhost:8081/empleados/retirar/vehiculo/buscar">
+			<input type="submit" value="Retirar Vehiculos Reservado">
+		</form>
+		<form method="get" action="http://localhost:8081/empleados/sinReserva/buscar">
+			<input type="submit" value="Retirar Sin Reserva">
+		</form>
+		<form method="get" action="http://localhost:8081/Menu">
+		<input type="submit" value="Volver Inicio">
+	</form>
+	</div>
+
+
+</body>
+
+</html>

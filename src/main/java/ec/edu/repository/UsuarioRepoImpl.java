@@ -1,5 +1,7 @@
 package ec.edu.repository;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -47,6 +49,13 @@ public class UsuarioRepoImpl implements IUsuarioRepo{
 				.createQuery("select u from Usuario u where u.cedula = :valoruno",Usuario.class);
 		miTypedQuery.setParameter("valoruno", cedula);
 		return miTypedQuery.getSingleResult();
+	}
+
+	@Override
+	public List<Usuario> buscarUsuarioCedulaTodos(String cedula) {
+		TypedQuery<Usuario> myQuery=this.entityManager.createQuery("Select c from Cliente c", Usuario.class);
+		List<Usuario> listaClientes=myQuery.getResultList();
+		return listaClientes;
 	}
 
 	

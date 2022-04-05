@@ -36,11 +36,21 @@ public class UsuarioController {
 	@Autowired
 	private IBudgetService budgetService;
 
+	
+	@GetMapping("menu/usuario")
+	public String menuPrincipal() {
+		return "menuUsuario";
+	}
+	
+	
 	@GetMapping("usuarioN")
 	public String vistaPaginaIngresoDatos(Usuario usuario) {
 		return "usuarioNuevo";
 	}
 
+	
+	
+	
 	@PostMapping("insertar")
 	public String insertarUsuarioCliente(Usuario usuario, BindingResult result, Model modelo) {
 		this.usuarioService.insertarUsuario(usuario);
@@ -70,11 +80,8 @@ public class UsuarioController {
 
 	@GetMapping("verficarDisponible")
 	public String verificarDisponibilidad(Reserva reserva, Model modelo, BindingResult result) {
-		
 		System.out.println("--------METODO VERIFICAR DISPONIBLE------- "+reserva.getFechaFin());
 		Vehiculo vehiBuscado = this.vehiculoService.buscarVehiculoPlaca(reserva.getVehiculo().getPlaca());
-		BigDecimal valorTotal = this.vehiculoService.costoReserva(reserva.getVehiculo().getPlaca(),
-				reserva.getFechaInicio(), reserva.getFechaFin());
 		List<Reserva> reservasVehiculos = vehiBuscado.getReservaVehiculo();
 		if (reservasVehiculos.isEmpty()||reservasVehiculos == null) {
 			System.out.println("--- ENTRO AL IF ---");
