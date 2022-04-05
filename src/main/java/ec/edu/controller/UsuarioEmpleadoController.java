@@ -1,5 +1,8 @@
 package ec.edu.controller;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -101,20 +104,68 @@ public class UsuarioEmpleadoController {
 	public String retirarVehiculoReservado(Model modelo, Reserva reserva) {
 		System.out.println("RETIRAR+  "+reserva.getNumeroReserva());
 		reserva = aux;
+		aux=null;
 		Reserva vehiculoReserva = this.budgetService.retirarVehiculoReserva(reserva.getNumeroReserva());
 		modelo.addAttribute("vehiculoReserva",vehiculoReserva);
 		
 		return "retirarVehiculoEncontradoNotify";
 	}
 	
+	/// 2F
+	
 	@GetMapping("sinReserva/buscar")
 	public String vistaPaginaSinReservaDatos(Vehiculo vehiculo){
 		return "vistaPaginaSinReserva";
 	}
 	
+	@GetMapping("sinReserva/encontrado")
+	public String mostrarSinReservaDatos(Vehiculo vehiculo, Model model) {
+		
+		List<Vehiculo> vehiculos = this.vehiculoService.buscarMarcaModelo(vehiculo.getMarca(), vehiculo.getModelo());
+		model.addAttribute("vehiculos",vehiculos);
+		
+		return "listaVehiculosSinReservaDatos";
+	}
+	
+	@GetMapping("sinReserva/ingresoDatos")
+	public String obtenerPaginaVehiculo(Reserva reserva, Model modelo) {
+		return "sinReservaIngresoDatos";
+	}
 	
 	
+	@GetMapping("sinReserva/verficarDisponible")
+	public String verificarDisponible(Model modelo, Reserva reserva) {
+		System.out.println("--------METODO VERIFICAR DISPONIBLE------- "+reserva.getFechaFin());
+		Vehiculo vehiBuscado = this.vehiculoService.buscarVehiculoPlaca(reserva.getVehiculo().getPlaca());
+		BigDecimal valorTotal = this.vehiculoService.costoReserva(reserva.getVehiculo().getPlaca(),
+				reserva.getFechaInicio(), reserva.getFechaFin());
+		List<Reserva> reservasVehiculos = vehiBuscado.getReservaVehiculo();
+		if (reservasVehiculos.isEmpty()||reservasVehiculos == null) {
+			System.out.println("--- ENTRO AL IF ---");
+			return "pagarSinReserva";
+		} else {
+			for (Reserva r : reservasVehiculos) {
+				if (this.budgetService.fechasNoDisponibles(r.getFechaInicio(), r.getFechaFin(),
+						reserva.getFechaInicio(), reserva.getFechaFin())) {
+					System.out.println("-----NO FECHAS---");
+					return "listaVehiculosDisponibles";
+				}
+			}
+			System.out.println("----EXISTES FECHAS-----");
+			return "pagarSinReserva";
+		}
+	}
 	
+	@PutMapping("sinReserva/pagoGenerado")
+	public String pagoGeneradoSinReserva(Model modelo, Reserva reserva) {
+		Reserva reservaActualizar = this.budgetService.realizarReserva(reserva.getVehiculo().getPlaca(),
+				reserva.getUsuario().getCedula(), reserva.getFechaInicio(), reserva.getFechaFin(),
+				reserva.getUsuario().getNumeroTarjeta());
+		System.out.println("----METODO PAGO GENERADO DESPUES-------");
+		System.out.println("PAGO GENERADO"+reservaActualizar.getValorTotal());
+		modelo.addAttribute("reservaActualizar",reservaActualizar);
+		return "sinReservaMostrarPago";
+	}
 	
 	
 }

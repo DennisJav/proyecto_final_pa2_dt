@@ -1,0 +1,53 @@
+
+<body>
+	<h1>Registrar Pago</h1>
+	<form th:action="@{/empleados/sinReserva/pagoGenerado}" th:object="${reserva}" th:method="PUT">
+
+		<table>
+			<tr>
+				<td>
+					<label> Fecha Inicio: </label>
+				</td>
+				<td>
+					<input type="datetime-local" id="fechaInicio" th:field="*{fechaInicio}" </td>
+			</tr>
+			
+			<tr>
+				<td>
+					<label> Fecha Fin: </label>
+				</td>
+				<td>
+					<input type="datetime-local" id="fechaFin" th:field="*{fechaFin}" </td>
+			</tr>
+			
+			<tr>
+				<td>
+					<label> Placa: </label>
+				</td>
+				<td>
+					<input type="text" id="placa" th:field="*{vehiculo.placa}" </td>
+			</tr>
+			
+			<tr>
+				<td>
+					<label> Cedula: </label>
+				</td>
+				<td>
+					<input type="text" id="cedula" th:field="*{usuario.cedula}" </td>
+			</tr>
+			
+			<tr>
+				<td>
+					<label> Tarjeta: </label>
+				</td>
+				<td>
+					<input type="text" id="tarjeta" th:field="*{usuario.numeroTarjeta}" </td>
+			</tr>
+
+		</table>
+
+		<input type="submit" value="Pagar">
+	</form>
+</body>
+
+</html>
