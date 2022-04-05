@@ -126,5 +126,43 @@ class IBudgetServiceImplTest {
 	    assertThat(vehiculos).isEmpty();
 	
 	}
+	@Test
+	void buscarModelo() {
+		assertThat(this.vehiculoService.buscarMarcaModelo("spark", "spark")).isNotEmpty();
+	}
+	
+	@Test
+	void buscarPlacaNueva() {
+		assertThat(this.vehiculoService.buscarVehiculoPlaca("poc4")).isNotNull();
+	}
+	
+	@Test
+	void buscarcedulanoRepetida() {
+		assertThat(this.usuarioService.buscarUsuarioCedula("qw")).isNotNull();
+	}
+	
+	@Test
+	void actualizarUsurioNuevo() {
+		assertThat(this.usuarioService.buscarUsuario(1));
+	}
+	
+	@Test
+	void controlarVehiculo() {
+		assertThat(this.budgetService.retirarVehiculoReserva("262").getEstado().isEmpty());
+	}
+	
+	@Test
+	void controlarUsuario() {
+		assertThat(this.usuarioService.buscarUsuario(1).getRegistro().isEmpty());
+	}
+	@Test
+	void controlarUsuarioTarjeta() {
+		assertThat(this.usuarioService.buscarUsuarioCedula("qw").getNumeroTarjeta().isEmpty());
+	}
+	@Test
+	void controlarVehiculoreserva() {
+		assertThat(this.vehiculoService.buscarVehiculoPlaca("poc4").getEstado().isEmpty());
+	}
+	
 	
 }
