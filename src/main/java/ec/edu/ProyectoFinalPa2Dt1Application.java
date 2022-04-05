@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,7 +93,13 @@ public class ProyectoFinalPa2Dt1Application implements CommandLineRunner{
 //		
 //
 //		
-	
+		 LocalDate  fechaInicioReservada = LocalDate.of(2022, Month.APRIL, 6);
+		 LocalDate  fechaFinReservada = LocalDate.of(2022, Month.APRIL, 10);
+			
+		
+		Period fecha = Period.between(fechaInicioReservada, fechaFinReservada);
+		
+		System.out.println(fecha.getDays());
 		
 	}
 	

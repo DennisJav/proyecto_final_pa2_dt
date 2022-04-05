@@ -13,16 +13,16 @@
 </head>
 
 <body>
-	<h1>Buscar Clientes</h1>
-	<form th:action="@{/empleados/buscar/cliente/resultado}" th:object="${usuario}" th:method="GET">
+	<h1>Buscar Vehiculo por Placa</h1>
+	<form th:action="@{/empleados/buscar/vehiculo/placa/resultado}" th:object="${vehiculo}" th:method="GET">
 		<table>
 
 			<tr>
 				<td>
-					<label> Cedula: </label>
+					<label> Placa: </label>
 				</td>
 				<td>
-					<input type="text" id="cedula" th:field="*{cedula}" </td>
+					<input type="text" id="placa" th:field="*{placa}" </td>
 			
 
 		</table>

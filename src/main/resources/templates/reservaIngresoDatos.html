@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+	<title>PRUEBA</title>
+
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="x-ua-compatible">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+		integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+
+<body>
+	<h1>Buscar Vehiculos Disponibles en las fechas: </h1>
+	<form th:action="@{/usuarios/reserva/verficarDisponible}" th:object="${reserva}" th:method="GET">
+
+		<table>
+			<tr>
+				<td>
+					<label> Fecha Inicio: </label>
+				</td>
+				<td>
+					<input type="date" id="fechaInicio" th:field="*{fechaInicio}" </td>
+
+				<td>
+					<label> Fecha Fin: </label>
+				</td>
+				<td>
+					<input type="date" id="fechaFin" th:field="*{fechaFin}" </td>
+			</tr>
+
+
+
+		</table>
+
+		<table>
+
+			<tr>
+				<td>
+					<label> Placa: </label>
+				</td>
+				<td>
+					<input type="text" id="placa" th:field="*{vehiculo.placa}" </td>
+			</tr>
+			<tr>
+				<td>
+					<label> Cedula: </label>
+				</td>
+				<td>
+					<input type="text" id="cedula" th:field="*{usuario.cedula}" </td>
+			</tr>
+
+		</table>
+
+		<input type="submit" value="Reservar">
+	</form>
+</body>
+
+</html>

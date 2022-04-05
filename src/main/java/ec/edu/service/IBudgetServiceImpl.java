@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -11,7 +13,7 @@ import javax.transaction.Transactional;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import static java.time.temporal.ChronoUnit.DAYS;
 
 import ec.edu.modelo.DetalleReserva;
 import ec.edu.modelo.Reserva;
@@ -31,9 +33,7 @@ public class IBudgetServiceImpl implements IBudgetService{
 	private IUsuarioService usuarioService;
 	
 	//revisar
-	public List<Vehiculo> buscarVehiculosDisponibles(String marca, String modelo) {	
-		return this.vehiculoService.buscarMarcaModelo(marca, modelo);
-	}
+
 
 
 	@Override
@@ -42,8 +42,7 @@ public class IBudgetServiceImpl implements IBudgetService{
 			String tarjeta) {
 		// TODO Auto-generated method stub
 		Vehiculo vehiculoPlaca = this.vehiculoService.buscarVehiculoPlaca(placa);
-		Duration tiempoReservado = Duration.between(fechaInicio, fechaFin); //duration devuelve en segundos
-		long diasReservados = tiempoReservado.toDays(); //paso el tiempo en segundos a dias
+		long diasReservados = DAYS.between(fechaInicio, fechaFin); //paso el tiempo en segundos a dias
 		Usuario user = this.usuarioService.buscarUsuarioCedula(cedula);
 		
 		//Calculo de valores para reserva
@@ -53,6 +52,9 @@ public class IBudgetServiceImpl implements IBudgetService{
 		BigDecimal valorTotal = valorSubtotal.add(valorICE);
 		
 		List<Reserva> reservaCliente = user.getReservaVehiculo();
+		if(reservaCliente == null) {
+			reservaCliente = new ArrayList<>();
+		}
 		Reserva reserva = new Reserva();
 		reserva.setFechaInicio(fechaInicio);
 		reserva.setFechaFin(fechaFin);
@@ -60,6 +62,22 @@ public class IBudgetServiceImpl implements IBudgetService{
 		reserva.setUsuario(user);
 		reserva.setVehiculo(vehiculoPlaca);
 		reserva.setNumeroReserva(reserva.getId().toString());
+		this.reservaService.insertarReserva(reserva);
+	
+		List<Reserva> reservaVehiculo = vehiculoPlaca.getReservaVehiculo();
+		if(reservaVehiculo==null) {
+			reservaVehiculo=new ArrayList<>();
+		}
+		reservaVehiculo.add(reserva);
+		vehiculoPlaca.setReservaVehiculo(reservaVehiculo);
+		this.vehiculoService.actualizarVehiculo(vehiculoPlaca);
+		
+		reservaCliente.add(reserva);
+		user.setReservaVehiculo(reservaCliente);
+		user.setNumeroTarjeta(tarjeta);
+		this.usuarioService.actualizarUsuario(user);
+		
+		
 		
 		DetalleReserva pago = new DetalleReserva();
 		pago.setFechaReserva(LocalDateTime.now());
@@ -68,70 +86,37 @@ public class IBudgetServiceImpl implements IBudgetService{
 		pago.setValorIce(valorICE);
 		pago.setValorSubtotal(valorSubtotal);
 		pago.setValorTotal(valorTotal);
+		
 		reserva.setDetalleReserva(pago);
 		
-		
-		List<Reserva> reservaVehiculo = vehiculoPlaca.getReservaVehiculo();
-		reservaVehiculo.add(reserva);
-		vehiculoPlaca.setReservaVehiculo(reservaVehiculo);
-		 
-		//Cambio estado a no disponible
-		vehiculoPlaca.setEstado("ND");
-		
-		
-		this.vehiculoService.actualizarVehiculo(vehiculoPlaca);
-		
-		reservaCliente.add(reserva);
-		user.setReservaVehiculo(reservaCliente);
-		this.usuarioService.actualizarUsuario(user);
-		
-		this.reservaService.insertarReserva(reserva);
+		reserva.setNumeroReserva(reserva.getId().toString());
+		this.reservaService.actualizarReserva(reserva);
 
-		
 		return reserva;
 		
 	}
-
-
+	
+	
 	@Override
-	public void registrarseComocliente(String cedula, String nombre, String apellido, LocalDate fechaNacimiento,
-			String genero, String registro, String pasword) {
-		// TODO Auto-generated method stub
-		try {
-			Usuario usuario = new Usuario();
-			usuario.setNombre(nombre);
-			usuario.setApellido(apellido);
-			usuario.setCedula(cedula);
-			usuario.setFechaNacimiento(fechaNacimiento);
-			usuario.setGenero(genero);
-			usuario.setPasword(pasword);
-			usuario.setRegistro(registro);
-			
-			Usuario doble=this.usuarioService.buscarUsuarioCedula(cedula);
-			if(doble.getCedula() !=  usuario.getCedula()) {
-				this.usuarioService.insertarUsuario(usuario);
-			}else {
-				LOG.error("El Usuario ya existe!!!!");
-			}
-		}catch (NullPointerException e) {
-			// TODO: handle exception
-			LOG.info("Error nulo");
+	public boolean fechasNoDisponibles(LocalDate fechaInicioReservada, LocalDate fechaFinReservada, LocalDate fechaInicioVerificar,
+			LocalDate fechaFinVerificar) {
+		
+		Period fecha = Period.between(fechaFinReservada, fechaInicioVerificar);
+		if (fecha.isZero()) {
+			return true;
+		} else if (fechaInicioVerificar.isAfter(fechaFinReservada) && fechaFinVerificar.isAfter(fechaInicioVerificar)) {
+			return false;
+		} else if (fechaInicioVerificar.isBefore(fechaInicioReservada) && fechaFinVerificar.isBefore(fechaInicioVerificar)) {
+			return false;
+		} else {
+			return true;
 		}
 		
-		
 	}
-
-
-
-
-	
 	
 	
 
-	
-	
 
-	
 	
 	
 }

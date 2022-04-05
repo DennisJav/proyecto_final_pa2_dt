@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import ec.edu.modelo.Usuario;
 import ec.edu.modelo.Vehiculo;
+import ec.edu.service.IBudgetService;
 import ec.edu.service.IUsuarioService;
 import ec.edu.service.IVehiculoService;
 
@@ -21,7 +22,8 @@ public class UsuarioEmpleadoController {
 	private IUsuarioService usuarioService;
 	@Autowired
 	private IVehiculoService vehiculoService;
-	
+	@Autowired
+	private IBudgetService budgetService;
 	
 	@GetMapping("registrarC")
 	public String vistaPaginaIngresoDatosCliente(Usuario usuario) {
@@ -35,12 +37,12 @@ public class UsuarioEmpleadoController {
 	}
 	
 	
-	@GetMapping("datosCliente")
+	@GetMapping("buscar/cliente")
 	public String vistaPaginaBuscarCliente(Usuario usuario) {
 		return "buscarCliente";
 	}
 	
-	@GetMapping("buscarCliente")
+	@GetMapping("buscar/cliente/resultado")
 	public String buscarClienteCedula(Usuario usuario, Model modelo) {
 		Usuario clienteBuscado = this.usuarioService.buscarUsuarioCedula(usuario.getCedula());
 		modelo.addAttribute("clienteBuscado",clienteBuscado);
@@ -53,6 +55,24 @@ public class UsuarioEmpleadoController {
 		return "registrarVehiculo";
 	}
 	
+	
+	@PostMapping("insertar/vehiculo")
+	private String insertarVehiculo(Vehiculo vehiculo, BindingResult result, Model modelo) {
+		this.vehiculoService.insertarVehiculo(vehiculo);
+		return "vehiculoRegistradoNotify";
+	}
+	
+	
+	@GetMapping("buscar/vehiculo/placa")
+	private String buscarVehiculoPlaca(Vehiculo vehiculo) {
+		return "buscarPlaca";
+	}
+	@GetMapping("buscar/vehiculo/placa/resultado")
+	private String resultadoVehiculoPlaca(Vehiculo vehiculo, Model modelo) {
+		Vehiculo vehiculoBuscado = this.vehiculoService.buscarVehiculoPlaca(vehiculo.getPlaca());
+		modelo.addAttribute("vehiculoBuscado",vehiculoBuscado);
+		return "mostrarPlaca";
+	}
 	
 	
 	

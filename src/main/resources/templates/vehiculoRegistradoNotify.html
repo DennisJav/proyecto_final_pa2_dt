@@ -13,22 +13,8 @@
 </head>
 
 <body>
-	<h1>Buscar Clientes</h1>
-	<form th:action="@{/empleados/buscar/cliente/resultado}" th:object="${usuario}" th:method="GET">
-		<table>
-
-			<tr>
-				<td>
-					<label> Cedula: </label>
-				</td>
-				<td>
-					<input type="text" id="cedula" th:field="*{cedula}" </td>
-			
-
-		</table>
-
-		<input type="submit" value="Buscar">
-	</form>
+	<h2>Vehiculo Registrado con exito</h2>
+	<a href="http://localhost:8081/empleados/buscar/vehiculo/placa"> Ver todos los vehiculos</a>
 </body>
 
 </html>
